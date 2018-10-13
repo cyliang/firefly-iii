@@ -49,6 +49,16 @@ class BillRepository implements BillRepositoryInterface
     private $user;
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        if ('testing' === env('APP_ENV')) {
+            Log::warning(sprintf('%s should not be instantiated in the TEST environment!', \get_class($this)));
+        }
+    }
+
+    /**
      * @param Bill $bill
      *
      * @return bool
@@ -138,7 +148,7 @@ class BillRepository implements BillRepositoryInterface
     public function getBillsForAccounts(Collection $accounts): Collection
     {
         $fields = ['bills.id', 'bills.created_at', 'bills.updated_at', 'bills.deleted_at', 'bills.user_id', 'bills.name', 'bills.match', 'bills.amount_min',
-                   'bills.amount_max', 'bills.date', 'bills.repeat_freq', 'bills.skip', 'bills.automatch', 'bills.active', 'bills.name_encrypted',
+                   'bills.amount_max', 'bills.date','bills.transaction_currency_id', 'bills.repeat_freq', 'bills.skip', 'bills.automatch', 'bills.active', 'bills.name_encrypted',
                    'bills.match_encrypted',];
         $ids    = $accounts->pluck('id')->toArray();
         $set    = $this->user->bills()

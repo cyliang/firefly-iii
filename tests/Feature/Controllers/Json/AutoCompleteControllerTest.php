@@ -52,10 +52,10 @@ class AutoCompleteControllerTest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        Log::debug(sprintf('Now in %s.', \get_class($this)));
+        Log::info(sprintf('Now in %s.', \get_class($this)));
     }
 
     /**
@@ -73,6 +73,25 @@ class AutoCompleteControllerTest extends TestCase
 
         $this->be($this->user());
         $response = $this->get(route('json.all-accounts'));
+        $response->assertStatus(200);
+        $response->assertExactJson([$accountA->name]);
+
+    }
+
+    /**
+     * @covers \FireflyIII\Http\Controllers\Json\AutoCompleteController
+     */
+    public function testAssetAccounts(): void
+    {
+        // mock stuff
+        $accountA     = factory(Account::class)->make();
+        $collection   = new Collection([$accountA]);
+        $accountRepos = $this->mock(AccountRepositoryInterface::class);
+        $accountRepos->shouldReceive('getAccountsByType')
+                     ->withArgs([[AccountType::DEFAULT, AccountType::ASSET]])->andReturn($collection);
+
+        $this->be($this->user());
+        $response = $this->get(route('json.asset-accounts'));
         $response->assertStatus(200);
         $response->assertExactJson([$accountA->name]);
 

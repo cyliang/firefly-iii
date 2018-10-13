@@ -41,6 +41,7 @@ use FireflyIII\Repositories\ImportJob\ImportJobRepositoryInterface;
 use FireflyIII\Services\Bunq\ApiContext;
 use FireflyIII\Services\Bunq\Payment;
 use FireflyIII\Support\Import\Routine\Bunq\StageImportDataHandler;
+use Log;
 use Mockery;
 use Preferences;
 use Tests\TestCase;
@@ -50,6 +51,15 @@ use Tests\TestCase;
  */
 class StageImportDataHandlerTest extends TestCase
 {
+    /**
+     *
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        Log::info(sprintf('Now in %s.', \get_class($this)));
+    }
+
     /**
      * @covers \FireflyIII\Support\Import\Routine\Bunq\StageImportDataHandler
      */
@@ -148,6 +158,7 @@ class StageImportDataHandlerTest extends TestCase
                         'identifier'            => 0,
                     ],
                 ],
+                'original-source'    => 'bunq-v' . config('firefly.version'),
             ],
         ];
 
@@ -372,6 +383,7 @@ class StageImportDataHandlerTest extends TestCase
                         'identifier'            => 0,
                     ],
                 ],
+                'original-source'    => 'bunq-v' . config('firefly.version'),
             ],
         ];
 

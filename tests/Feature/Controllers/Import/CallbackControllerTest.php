@@ -26,9 +26,9 @@ namespace Tests\Feature\Controllers\Import;
 
 use FireflyIII\Models\ImportJob;
 use FireflyIII\Repositories\ImportJob\ImportJobRepositoryInterface;
-use Tests\TestCase;
 use Log;
 use Mockery;
+use Tests\TestCase;
 
 /**
  *
@@ -42,17 +42,18 @@ class CallbackControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        Log::debug(sprintf('Now in %s.', \get_class($this)));
+        Log::info(sprintf('Now in %s.', \get_class($this)));
     }
 
     /**
      * @covers \FireflyIII\Http\Controllers\Import\CallbackController
      */
-    public function testYnabBasic(): void {
+    public function testYnabBasic(): void
+    {
         $repository = $this->mock(ImportJobRepositoryInterface::class);
 
         // config for job:
-        $config = [];
+        $config    = [];
         $newConfig = ['auth_code' => 'abc'];
 
         // mock calls.
@@ -72,7 +73,8 @@ class CallbackControllerTest extends TestCase
     /**
      * @covers \FireflyIII\Http\Controllers\Import\CallbackController
      */
-    public function testYnabBasicBadJob(): void {
+    public function testYnabBasicBadJob(): void
+    {
         $repository = $this->mock(ImportJobRepositoryInterface::class);
 
         // mock calls.
@@ -87,11 +89,12 @@ class CallbackControllerTest extends TestCase
     /**
      * @covers \FireflyIII\Http\Controllers\Import\CallbackController
      */
-    public function testYnabBasicNoCode(): void {
+    public function testYnabBasicNoCode(): void
+    {
         $repository = $this->mock(ImportJobRepositoryInterface::class);
 
         // config for job:
-        $config = [];
+        $config    = [];
         $newConfig = ['auth_code' => 'abc'];
 
         // mock calls.

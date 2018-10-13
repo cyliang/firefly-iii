@@ -48,6 +48,16 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $user;
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        if ('testing' === env('APP_ENV')) {
+            Log::warning(sprintf('%s should not be instantiated in the TEST environment!', \get_class($this)));
+        }
+    }
+
+    /**
      * @param Category $category
      *
      * @return bool
@@ -74,13 +84,36 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function earnedInPeriod(Collection $categories, Collection $accounts, Carbon $start, Carbon $end): string
     {
+        $set = $this->earnedInPeriodCollection($categories, $accounts, $start, $end);
+
+        return (string)$set->sum('transaction_amount');
+    }
+
+    /** @noinspection MoreThanThreeArgumentsInspection */
+    /**
+     * @param Collection $categories
+     * @param Collection $accounts
+     * @param Carbon     $start
+     * @param Carbon     $end
+     *
+     * @return Collection
+     */
+    public function earnedInPeriodCollection(Collection $categories, Collection $accounts, Carbon $start, Carbon $end): Collection
+    {
         /** @var TransactionCollectorInterface $collector */
         $collector = app(TransactionCollectorInterface::class);
         $collector->setUser($this->user);
-        $collector->setRange($start, $end)->setTypes([TransactionType::DEPOSIT])->setAccounts($accounts)->setCategories($categories);
-        $set = $collector->getTransactions();
+        if (0 !== $accounts->count()) {
+            $collector->setAccounts($accounts);
+        }
 
-        return (string)$set->sum('transaction_amount');
+        if (0 === $accounts->count()) {
+            $collector->setAllAssetAccounts();
+        }
+
+        $collector->setRange($start, $end)->setTypes([TransactionType::DEPOSIT])->setCategories($categories);
+
+        return $collector->getTransactions();
     }
 
     /**
@@ -172,6 +205,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $set;
     }
 
+    /** @noinspection MoreThanThreeArgumentsInspection */
+
     /**
      * @param Category   $category
      * @param Collection $accounts
@@ -202,7 +237,6 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $lastJournalDate;
     }
 
-    /** @noinspection MoreThanThreeArgumentsInspection */
     /**
      * @param Collection $categories
      * @param Collection $accounts
@@ -248,6 +282,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $data;
     }
 
+    /** @noinspection MoreThanThreeArgumentsInspection */
+
     /**
      * @param Collection $accounts
      * @param Carbon     $start
@@ -286,7 +322,6 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $result;
     }
 
-    /** @noinspection MoreThanThreeArgumentsInspection */
     /**
      * @param Collection $categories
      * @param Collection $accounts
@@ -373,6 +408,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $result;
     }
 
+    /** @noinspection MoreThanThreeArgumentsInspection */
+
     /**
      * @param User $user
      */
@@ -392,6 +429,23 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function spentInPeriod(Collection $categories, Collection $accounts, Carbon $start, Carbon $end): string
     {
+        $set = $this->spentInPeriodCollection($categories, $accounts, $start, $end);
+
+
+        return (string)$set->sum('transaction_amount');
+    }
+
+    /** @noinspection MoreThanThreeArgumentsInspection */
+    /**
+     * @param Collection $categories
+     * @param Collection $accounts
+     * @param Carbon     $start
+     * @param Carbon     $end
+     *
+     * @return Collection
+     */
+    public function spentInPeriodCollection(Collection $categories, Collection $accounts, Carbon $start, Carbon $end): Collection
+    {
         /** @var TransactionCollectorInterface $collector */
         $collector = app(TransactionCollectorInterface::class);
         $collector->setUser($this->user);
@@ -404,12 +458,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             $collector->setAllAssetAccounts();
         }
 
-        $set = $collector->getTransactions();
-
-        return (string)$set->sum('transaction_amount');
+        return $collector->getTransactions();
     }
-
-    /** @noinspection MoreThanThreeArgumentsInspection */
 
     /**
      * A very cryptic method name that means:

@@ -53,6 +53,10 @@ class ImportJobRepository implements ImportJobRepositoryInterface
     {
         $this->maxUploadSize = (int)config('firefly.maxUploadSize');
         $this->uploadDisk    = Storage::disk('upload');
+
+        if ('testing' === env('APP_ENV')) {
+            Log::warning(sprintf('%s should not be instantiated in the TEST environment!', \get_class($this)));
+        }
     }
 
     /**
@@ -338,6 +342,7 @@ class ImportJobRepository implements ImportJobRepositoryInterface
      * @param UploadedFile $file
      *
      * @return MessageBag
+     * @throws FireflyException
      */
     public function storeFileUpload(ImportJob $job, string $name, UploadedFile $file): MessageBag
     {
@@ -370,6 +375,12 @@ class ImportJobRepository implements ImportJobRepositoryInterface
         $attachment->save();
         $fileObject = $file->openFile('r');
         $fileObject->rewind();
+
+
+        if(0 === $file->getSize()) {
+            throw new FireflyException('Cannot upload empty or non-existent file.');
+        }
+
         $content   = $fileObject->fread($file->getSize());
         $encrypted = Crypt::encrypt($content);
         $this->uploadDisk->put($attachment->fileName(), $encrypted);
@@ -378,7 +389,6 @@ class ImportJobRepository implements ImportJobRepositoryInterface
 
         return new MessageBag;
     }
-
 
 
     /**

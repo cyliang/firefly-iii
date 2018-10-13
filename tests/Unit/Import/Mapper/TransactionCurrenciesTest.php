@@ -27,6 +27,7 @@ use FireflyIII\Import\Mapper\TransactionCurrencies;
 use FireflyIII\Models\TransactionCurrency;
 use FireflyIII\Repositories\Currency\CurrencyRepositoryInterface;
 use Illuminate\Support\Collection;
+use Log;
 use Tests\TestCase;
 
 /**
@@ -34,6 +35,15 @@ use Tests\TestCase;
  */
 class TransactionCurrenciesTest extends TestCase
 {
+    /**
+     *
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        Log::info(sprintf('Now in %s.', \get_class($this)));
+    }
+
     /**
      * @covers \FireflyIII\Import\Mapper\TransactionCurrencies
      */

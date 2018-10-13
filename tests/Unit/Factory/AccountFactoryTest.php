@@ -44,7 +44,7 @@ class AccountFactoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        Log::debug(sprintf('Now in %s.', \get_class($this)));
+        Log::info(sprintf('Now in %s.', \get_class($this)));
     }
 
     /**
@@ -574,10 +574,11 @@ class AccountFactoryTest extends TestCase
     public function testFindOrCreate(): void
     {
         /** @var Account $account */
-        $account = $this->user()->accounts()->inRandomOrder()->first();
+        $account = $this->getRandomRevenue();
         /** @var AccountFactory $factory */
         $factory = app(AccountFactory::class);
         $factory->setUser($this->user());
+        Log::debug(sprintf('Searching for account #%d with name "%s"', $account->id, $account->name));
 
         $result = $factory->findOrCreate($account->name, $account->accountType->type);
         $this->assertEquals($result->id, $account->id);

@@ -37,6 +37,7 @@ return [
     // index page:
     'general_index_title'                 => 'Datei importieren',
     'general_index_intro'                 => 'Willkommen beim Importassistenten von Firefly III. Es gibt einige Möglichkeiten, Daten in Firefly III zu importieren, die hier als Schaltflächen angezeigt werden.',
+
     // import provider strings (index):
     'button_fake'                         => 'Importfunktion testen',
     'button_file'                         => 'Datei importieren',
@@ -110,6 +111,7 @@ return [
     'job_config_file_upload_type_help'    => 'Typ der hochzuladenden Datei auswählen',
     'job_config_file_upload_submit'       => 'Dateien hochladen',
     'import_file_type_csv'                => 'CSV (Kommagetrennte Werte)',
+    'import_file_type_ofx'                => 'OFX',
     'file_not_utf8'                       => 'Die hochgeladene Datei ist nicht als UTF-8 oder ASCII kodiert. Firefly III kann mit solchen Dateien nicht umgehen. Bitte verwenden Sie „Notepad++” oder „Sublime”, um Ihre Datei in UTF-8 zu konvertieren.',
     'job_config_uc_title'                 => 'Import einrichten (2/4) • Allgemeine Datei-Einstellungen',
     'job_config_uc_text'                  => 'Um Ihre Datei korrekt importieren zu können, überprüfen Sie bitte die folgenden Optionen.',
@@ -123,6 +125,7 @@ return [
     'job_config_uc_specifics_txt'         => 'Einige Banken liefern schlecht formatierte Dateien. Firefly III kann diese automatisch korrigieren. Wenn Ihre Bank solche Dateien liefert, diese aber hier nicht aufgeführt sind, öffnen Sie bitte einen Fehlerbericht auf GitHub.',
     'job_config_uc_submit'                => 'Fortsetzen',
     'invalid_import_account'              => 'Sie haben ein ungültiges Konto zum Importieren ausgewählt.',
+    'import_liability_select'             => 'Verbindlichkeit',
     // job configuration for Spectre:
     'job_config_spectre_login_title'      => 'Wählen Sie Ihre Zugangsdaten',
     'job_config_spectre_login_text'       => 'Firefly III hat :count bestehende Zugangsdaten in Ihrem Spectre-Konto gefunden. Von welchem möchten Sie importieren?',
@@ -167,13 +170,13 @@ return [
     'job_config_ynab_apply_rules_text'     => 'Standardmäßig werden Ihre Regeln auf die Buchungen angewendet, die während dieser Importroutine erstellt wurden. Wenn Sie dies nicht möchten, deaktivieren Sie dieses Kontrollkästchen.',
 
     // job configuration for YNAB:
-    'job_config_ynab_select_budgets'       => 'Wählen Sie Ihren Kostenrahmen aus',
-    'job_config_ynab_select_budgets_text'  => 'Sie haben :count Kostenrahmen bei YNAB gespeichert. Bitte wählen Sie diejenige aus, aus der Firefly III die Buchungen importieren soll.',
-    'job_config_ynab_no_budgets'           => 'Es sind keine Kostenrahmen verfügbar, aus denen importiert werden kann.',
+    'job_config_ynab_select_budgets'       => 'Wählen Sie Ihr Budget aus',
+    'job_config_ynab_select_budgets_text'  => 'Sie haben :count Budgets bei YNAB gespeichert. Bitte wählen Sie dasjenige aus, aus dem Firefly III die Buchungen importieren soll.',
+    'job_config_ynab_no_budgets'           => 'Es sind keine Budgets verfügbar, aus denen importiert werden kann.',
     'ynab_no_mapping'                      => 'Es wurden keine Konten zum Importieren ausgewählt.',
-    'job_config_ynab_bad_currency'         => 'Aus de(n/m) folgenden Kostenrahmen kann nicht importieren werden, da Sie über keine Konten mit der gleichen Währung wie diese Kostenrahmen verfügen.',
+    'job_config_ynab_bad_currency'         => 'Aus de(n/m) folgenden Budget(s) kann nicht importieren werden, da Sie über keine Konten mit der gleichen Währung wie diese(s) Budget(s) verfügen.',
     'job_config_ynab_accounts_title'       => 'Konten auswählen',
-    'job_config_ynab_accounts_text'        => 'In diesem Kostenrahmen stehen Ihnen die folgenden Konten zur Verfügung. Bitte wählen Sie aus, von welchen Konten Sie importieren möchten und wo die Buchungen gespeichert werden sollen.',
+    'job_config_ynab_accounts_text'        => 'In diesem Budget stehen Ihnen die folgenden Konten zur Verfügung. Bitte wählen Sie aus, von welchen Konten Sie importieren möchten und wo die Buchungen gespeichert werden sollen.',
 
 
     // keys from "extra" array:
@@ -261,13 +264,14 @@ return [
     'column_account-bic'                   => 'Bestandskonto (BIC)',
     'column_amount'                        => 'Betrag',
     'column_amount_foreign'                => 'Betrag (in Fremdwährung)',
-    'column_amount_debit'                  => 'Betrag (Debitoren-Spalte)',
+    'column_amount_debit'                  => 'Betrag (Ausgabe)',
     'column_amount_credit'                 => 'Betrag (Guthaben-Spalte)',
+    'column_amount_negated'                => 'Betrag (Spalte mit negativen Werten)',
     'column_amount-comma-separated'        => 'Betrag (Komma als Dezimaltrennzeichen)',
     'column_bill-id'                       => 'Rechnung (ID übereinstimmend mit FF3)',
     'column_bill-name'                     => 'Rechnungsname',
-    'column_budget-id'                     => 'Kostenrahmen-ID (übereinstimmend mit FF3)',
-    'column_budget-name'                   => 'Kostenrahmenname',
+    'column_budget-id'                     => 'Budget-ID (übereinstimmend mit FF3)',
+    'column_budget-name'                   => 'Budgetname',
     'column_category-id'                   => 'Kategorie (ID übereinstimmend mit FF3)',
     'column_category-name'                 => 'Kategorie (Name)',
     'column_currency-code'                 => 'Währungsstandard (ISO 4217)',

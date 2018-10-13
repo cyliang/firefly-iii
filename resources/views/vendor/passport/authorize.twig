@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="{{ route('index') }}/">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -74,7 +75,7 @@
 
                         <div class="buttons">
                             <!-- Authorize Button -->
-                            <form method="post" action="/oauth/authorize">
+                            <form method="post" action="{{ route('index') }}/oauth/authorize">
                                 {{ csrf_field() }}
 
                                 <input type="hidden" name="state" value="{{ request.state }}">
@@ -83,7 +84,7 @@
                             </form>
 
                             <!-- Cancel Button -->
-                            <form method="post" action="/oauth/authorize">
+                            <form method="post" action="{{ route('index') }}/oauth/authorize">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
 

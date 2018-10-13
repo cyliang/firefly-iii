@@ -55,6 +55,16 @@ class BudgetRepository implements BudgetRepositoryInterface
     private $user;
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        if ('testing' === env('APP_ENV')) {
+            Log::warning(sprintf('%s should not be instantiated in the TEST environment!', \get_class($this)));
+        }
+    }
+
+    /**
      * A method that returns the amount of money budgeted per day for this budget,
      * on average.
      *
@@ -305,6 +315,7 @@ class BudgetRepository implements BudgetRepositoryInterface
             $set = BudgetLimit::leftJoin('budgets', 'budgets.id', '=', 'budget_limits.budget_id')
                               ->with(['budget'])
                               ->where('budgets.user_id', $this->user->id)
+                              ->whereNull('budgets.deleted_at')
                               ->get(['budget_limits.*']);
 
             return $set;
@@ -313,6 +324,7 @@ class BudgetRepository implements BudgetRepositoryInterface
         if (null === $start xor null === $end) {
             $query = BudgetLimit::leftJoin('budgets', 'budgets.id', '=', 'budget_limits.budget_id')
                                 ->with(['budget'])
+                                ->whereNull('budgets.deleted_at')
                                 ->where('budgets.user_id', $this->user->id);
             if (null !== $end) {
                 // end date must be before $end.
@@ -330,6 +342,7 @@ class BudgetRepository implements BudgetRepositoryInterface
         $set = BudgetLimit::leftJoin('budgets', 'budgets.id', '=', 'budget_limits.budget_id')
                           ->with(['budget'])
                           ->where('budgets.user_id', $this->user->id)
+                          ->whereNull('budgets.deleted_at')
                           ->where(
                               function (Builder $q5) use ($start, $end) {
                                   $q5->where(
