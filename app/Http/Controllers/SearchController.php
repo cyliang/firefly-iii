@@ -96,7 +96,7 @@ class SearchController extends Controller
         if (!$cache->has()) {
             // parse search terms:
             $searcher->parseQuery($fullQuery);
-            $searcher->setLimit((int)env('SEARCH_RESULT_LIMIT', 50));
+            $searcher->setLimit((int)config('firefly.search_result_limit'));
             $transactions = $searcher->searchTransactions();
             $cache->store($transactions);
         }
@@ -107,6 +107,7 @@ class SearchController extends Controller
             Log::error(sprintf('Cannot render search.search: %s', $e->getMessage()));
             $html = 'Could not render view.';
         }
+
         // @codeCoverageIgnoreEnd
 
         return response()->json(['count' => $transactions->count(), 'html' => $html]);

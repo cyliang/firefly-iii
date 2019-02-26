@@ -25,6 +25,7 @@ namespace FireflyIII\Repositories\Account;
 use Carbon\Carbon;
 use FireflyIII\Models\Account;
 use FireflyIII\Models\AccountType;
+use FireflyIII\Models\TransactionCurrency;
 use FireflyIII\Models\TransactionJournal;
 use FireflyIII\User;
 use Illuminate\Support\Collection;
@@ -35,7 +36,6 @@ use Illuminate\Support\Collection;
  */
 interface AccountRepositoryInterface
 {
-
     /**
      * Moved here from account CRUD.
      *
@@ -87,6 +87,20 @@ interface AccountRepositoryInterface
      * @return Account|null
      */
     public function findNull(int $accountId): ?Account;
+
+    /**
+     * @param Account $account
+     *
+     * @return TransactionCurrency|null
+     */
+    public function getAccountCurrency(Account $account): ?TransactionCurrency;
+
+    /**
+     * @param Account $account
+     *
+     * @return string
+     */
+    public function getAccountType(Account $account): string;
 
     /**
      * Return account type or null if not found.
@@ -168,6 +182,13 @@ interface AccountRepositoryInterface
     public function getOpeningBalanceDate(Account $account): ?string;
 
     /**
+     * @param Account $account
+     *
+     * @return Collection
+     */
+    public function getPiggyBanks(Account $account): Collection;
+
+    /**
      * Find or create the opposing reconciliation account.
      *
      * @param Account $account
@@ -175,6 +196,13 @@ interface AccountRepositoryInterface
      * @return Account|null
      */
     public function getReconciliation(Account $account): ?Account;
+
+    /**
+     * @param Account $account
+     *
+     * @return bool
+     */
+    public function isAsset(Account $account): bool;
 
     /**
      * @param Account $account

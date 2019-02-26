@@ -37,7 +37,6 @@ class SecureHeaders
      *
      * @param \Illuminate\Http\Request $request
      * @param \Closure                 $next
-     * @param string|null              $guard
      *
      * @return mixed
      */
@@ -45,20 +44,26 @@ class SecureHeaders
     {
         $response    = $next($request);
         $google      = '';
-        $analyticsId = env('ANALYTICS_ID', '');
+        $analyticsId = config('firefly.analytics_id');
         if ('' !== $analyticsId) {
             $google = 'www.googletagmanager.com/gtag/js'; // @codeCoverageIgnore
         }
         $csp = [
             "default-src 'none'",
+            "object-src 'self'",
             sprintf("script-src 'self' 'unsafe-eval' 'unsafe-inline' %s", $google),
             "style-src 'self' 'unsafe-inline'",
             "base-uri 'self'",
-            "form-action 'self'",
             "font-src 'self'",
             "connect-src 'self'",
             "img-src 'self' data: https://api.tiles.mapbox.com",
+            "manifest-src 'self'",
         ];
+
+        $route = $request->route();
+        if (null !== $route && 'oauth/authorize' !== $route->uri) {
+            $csp[] = "form-action 'self'";
+        }
 
         $featurePolicies = [
             "geolocation 'none'",
@@ -76,7 +81,10 @@ class SecureHeaders
             "payment 'none'",
         ];
 
-        $response->header('X-Frame-Options', 'deny');
+        $disableFrameHeader = config('firefly.disable_frame_header');
+        if (false === $disableFrameHeader || null === $disableFrameHeader) {
+            $response->header('X-Frame-Options', 'deny');
+        }
         $response->header('Content-Security-Policy', implode('; ', $csp));
         $response->header('X-XSS-Protection', '1; mode=block');
         $response->header('X-Content-Type-Options', 'nosniff');

@@ -56,7 +56,7 @@ class Search implements SearchInterface
         $this->modifiers      = new Collection;
         $this->validModifiers = (array)config('firefly.search_modifiers');
 
-        if ('testing' === env('APP_ENV')) {
+        if ('testing' === config('app.env')) {
             Log::warning(sprintf('%s should not be instantiated in the TEST environment!', \get_class($this)));
         }
 
@@ -99,7 +99,7 @@ class Search implements SearchInterface
             $filteredQuery = str_replace($match, '', $filteredQuery);
         }
         $filteredQuery = trim(str_replace(['"', "'"], '', $filteredQuery));
-        if (\strlen($filteredQuery) > 0) {
+        if ('' != $filteredQuery) {
             $this->words = array_map('trim', explode(' ', $filteredQuery));
         }
     }
@@ -237,7 +237,7 @@ class Search implements SearchInterface
                 case 'after':
                     Log::debug(sprintf('Set "%s" using collector with value "%s"', $modifier['type'], $modifier['value']));
                     $after = new Carbon($modifier['value']);
-                    $collector->setBefore($after);
+                    $collector->setAfter($after);
                     break;
             }
         }
@@ -251,7 +251,7 @@ class Search implements SearchInterface
     private function extractModifier(string $string): void
     {
         $parts = explode(':', $string);
-        if (2 === \count($parts) && '' !== trim((string)$parts[1]) && \strlen(trim((string)$parts[0])) > 0) {
+        if (2 === \count($parts) && '' !== trim((string)$parts[1]) && '' !== trim((string)$parts[0])) {
             $type  = trim((string)$parts[0]);
             $value = trim((string)$parts[1]);
             if (\in_array($type, $this->validModifiers, true)) {
